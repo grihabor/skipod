@@ -119,21 +119,15 @@ double MeasureMeanTime(void (*f)(void), int count)
 }
 
 
-void RunTest(int i)
-{
-    omp_set_num_threads(i);
-
-    printf("threads: %d, mean time: %lf\n", i, MeasureMeanTime(Run, 20));
-}
-
-
-
 int main(int argc, char *argv[])
 {
     int cntThreads=omp_get_max_threads();
     printf("OpenMP: max number of threads = %d\n", cntThreads);
 
-    for(int i = 1; i <= cntThreads; ++i)
-        RunTest(i);
+    for(int i = 1; i <= cntThreads; ++i){
+        omp_set_num_threads(i);
+
+        printf("threads: %d, mean time: %lf\n", i, MeasureMeanTime(Run, 20));
+    }
     return 0;
 }
