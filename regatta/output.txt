@@ -1,0 +1,16 @@
+threads: 1, mean time: 1.152792
+threads: 2, mean time: 0.572618
+threads: 3, mean time: 0.403639
+threads: 4, mean time: 0.308374
+threads: 5, mean time: 0.252805
+threads: 6, mean time: 0.220588
+threads: 7, mean time: 0.203295
+threads: 8, mean time: 0.174726
+threads: 9, mean time: 0.259009
+threads: 10, mean time: 0.201669
+threads: 11, mean time: 0.143469
+threads: 12, mean time: 0.142442
+threads: 13, mean time: 0.144764
+threads: 14, mean time: 0.112443
+threads: 15, mean time: 0.129136
+threads: 16, mean time: 0.112992

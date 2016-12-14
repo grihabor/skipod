@@ -19,8 +19,6 @@ data = dict(x=[], y=[])
 
 with open(output_filename, 'r') as f:
     for i, line in enumerate(f):
-        if i < 1:
-            continue
         parts = line.split(',')
         data['y'].append(parts[1].split()[-1])
         data['x'].append(parts[0].split()[-1])

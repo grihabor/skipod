@@ -2,10 +2,9 @@
 #include <stdio.h>
 #include <math.h>
 #include <time.h>
+#include <stdlib.h>
 
 #define EPS 1e-6
-
-int nThreads;
 
 //constants to use
 //#define LOGS
@@ -41,7 +40,7 @@ struct Integral CalcIntegralAdv(double a, double b, int n, double (*f)(double x)
     double sum = 0.;
 
 #ifdef USE_OPENMP_PARALLEL
-    #pragma omp parallel for num_threads(nThreads) reduction (+:sum)
+    #pragma omp parallel for reduction (+:sum)
 #endif
     for(int i = 1; i < n; ++i){
         sum += f(a + i*dx);
@@ -122,14 +121,15 @@ double MeasureMeanTime(void (*f)(void), int count)
 
 int main(int argc, char *argv[])
 {
-    int cntThreads=omp_get_max_threads();
-    printf("OpenMP: max number of threads = %d\n", cntThreads);
+#pragma omp parallel
+    {
+#pragma omp master
+        {
+            int cntThreads=omp_get_max_threads();
+            printf("threads: %d, ", cntThreads);
+        }
 
-    for(int i = 1; i <= cntThreads; ++i){
-        //omp_set_num_threads(i);
-        nThreads = i;
-
-        printf("threads: %d, mean time: %lf\n", i, MeasureMeanTime(Run, 20));
     }
+    printf("mean time: %lf\n", MeasureMeanTime(Run, 20));
     return 0;
 }
