@@ -2,12 +2,9 @@ import matplotlib.pyplot as plt
 import os 
 
 output_dirname = 'output'
-output_filename = '{}/output.txt'.format(output_dirname)
 
 if not os.path.isdir(output_dirname):
     os.mkdir(output_dirname)
-
-#os.system('./prog > {}'.format(output_filename))
 
 
 class Data:
@@ -15,16 +12,25 @@ class Data:
         self.x = x
         self.y = y
 
-data = dict(x=[], y=[])
 
-with open(output_filename, 'r') as f:
-    for i, line in enumerate(f):
-        parts = line.split(',')
-        data['y'].append(parts[1].split()[-1])
-        data['x'].append(parts[0].split()[-1])
+for root, dirs, files in os.walk(output_dirname):
+    for plot_file in files:
+        data = dict(x=[], y=[])
 
-plt.plot(data['x'], data['y'])
-plt.ylabel('Time (seconds)')
-plt.xlabel('Thread count')
-plt.savefig('{}/local.png'.format(output_dirname), bbox_inches='tight')
+        plot_filename, extension = os.path.splitext(plot_file)
+        if extension != '.txt':
+            continue
 
+        with open('{}/{}'.format(root, plot_file), 'r') as f:
+            for i, line in enumerate(f):
+                if not ',' in line:
+                    continue
+                parts = line.split(',')
+                data['y'].append(parts[1].split()[-1])
+                data['x'].append(parts[0].split()[-1])
+
+        plt.plot(data['x'], data['y'])
+        plt.ylabel('Time (seconds)')
+        plt.xlabel('Thread count')
+        plt.savefig('{}/{}.png'.format(output_dirname, plot_filename), bbox_inches='tight')
+        plt.clf()
