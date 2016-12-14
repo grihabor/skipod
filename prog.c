@@ -5,6 +5,7 @@
 
 #define EPS 1e-6
 
+int nThreads;
 
 //constants to use
 //#define LOGS
@@ -40,7 +41,7 @@ struct Integral CalcIntegralAdv(double a, double b, int n, double (*f)(double x)
     double sum = 0.;
 
 #ifdef USE_OPENMP_PARALLEL
-    #pragma omp parallel for reduction (+:sum)
+    #pragma omp parallel for num_threads(nThreads) reduction (+:sum)
 #endif
     for(int i = 1; i < n; ++i){
         sum += f(a + i*dx);
@@ -125,7 +126,8 @@ int main(int argc, char *argv[])
     printf("OpenMP: max number of threads = %d\n", cntThreads);
 
     for(int i = 1; i <= cntThreads; ++i){
-        omp_set_num_threads(i);
+        //omp_set_num_threads(i);
+        nThreads = i;
 
         printf("threads: %d, mean time: %lf\n", i, MeasureMeanTime(Run, 20));
     }
