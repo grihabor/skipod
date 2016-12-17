@@ -4,7 +4,7 @@
 #include <time.h>
 #include <stdlib.h>
 
-#define EPS 1e-6
+double EPS = 1e-6;
 
 //constants to use
 //#define LOGS
@@ -121,6 +121,11 @@ double MeasureMeanTime(void (*f)(void), int count)
 
 int main(int argc, char *argv[])
 {
+    if(argc > 1){
+        sscanf(argv[1], "%lf", &EPS);
+    }
+    printf("EPS: %.1e, ", EPS);
+
 #pragma omp parallel
     {
 #pragma omp master
